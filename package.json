@@ -1,0 +1,13 @@
+{
+  "name": "vong-quay-may-man-zalo",
+  "version": "1.0.0",
+  "description": "Vong quay may man dong bo truc tiep cho nhom Zalo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}
