@@ -509,10 +509,22 @@ function showWinner(name){$('winnerName').textContent=name;$('winnerBox').classL
 socket.on('connect',()=>{$('status').textContent='Đã kết nối — đang đồng bộ dữ liệu…'});
 socket.on('disconnect',()=>{$('status').textContent='Mất kết nối. Đang thử kết nối lại…'});
 socket.on('state:update',renderState);
-socket.on('admin:login-result',r=>{
-  if(r.ok){isAdmin=true;$('loginArea').classList.add('hidden');$('adminArea').classList.remove('hidden');$('toast').textContent='Đăng nhập Admin thành công.';$('namesInput').value=names.join('\n')}
-  else $('toast').textContent=r.message||'Đăng nhập thất bại.';
+
+socket.on('admin:login-result', r => {
+  if (r.ok) {
+    isAdmin = true;
+    $('loginArea').classList.add('hidden');
+    $('adminArea').classList.remove('hidden');
+    $('toast').textContent = 'Đăng nhập Admin thành công.';
+    $('namesInput').value = names.join('\n');
+  } else {
+    $('toast').textContent =
+      r.message || 'Mật khẩu không đúng! Vui lòng thử lại.';
+
+    $('toast').classList.remove('hidden');
+  }
 });
+
 socket.on('admin:error',msg=>$('toast').textContent=msg);
 socket.on('admin:notice',msg=>$('toast').textContent=msg);
 socket.on('spin:start',data=>{
