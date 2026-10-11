@@ -114,11 +114,21 @@ app.get("/api/admin/export.csv", auth, (_req, res) => {
 });
 
 io.on("connection", socket => {
-  socket.emit("state:update", publicState());
-  socket.on("admin:login", password => {
-    if (typeof password === "string" && password === ADMIN_PASSWORD) { socket.data.isAdmin = true; socket.emit("admin:login-result", { ok: true }); }
-    else socket.emit("admin:login-result", { ok: false, message: "Mật khẩu chưa đúng." });
-  });
+  
+socket.emit("state:update", publicState());
+
+socket.on("admin:login", password => {
+  if (typeof password === "string" && password === ADMIN_PASSWORD) {
+    socket.data.isAdmin = true;
+    socket.emit("admin:login-result", { ok: true });
+  } else {
+    socket.emit("admin:login-result", {
+      ok: false,
+      message: "Mật khẩu không đúng! Vui lòng thử lại."
+    });
+  }
+});
+
   socket.on("admin:set-names", rawNames => {
     if (!isAdmin(socket)) return sendError(socket, "Chỉ Admin mới được sửa danh sách.");
     if (typeof rawNames !== "string") return sendError(socket, "Danh sách không hợp lệ.");
