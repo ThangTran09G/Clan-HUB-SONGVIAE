@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sống Vì AE • Clan Hub</title>
+<style>
+:root{--bg:#10152b;--panel:#1b2342;--gold:#ffd166;--pink:#ff5d8f;--cyan:#59e1ff;--text:#f6f7ff;--muted:#aeb8dd;--line:#ffffff25;--field:#0e1530}
+body.light{--bg:#f2f4fa;--panel:#ffffff;--text:#20263b;--muted:#59647c;--line:#cbd2e1;--field:#f7f8fc}
+html{background:#090d1c}
+body.light{background:transparent}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:transparent;overflow-x:hidden}
+.video-background{position:fixed;inset:0;width:100vw;height:50vh;border:0;z-index:-3;pointer-events:none;object-fit:cover}
+.image-background {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 33%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -3;
+    pointer-events: none;
+}
+.video-shade{position:fixed;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(120deg,rgba(7,11,28,.72),rgba(12,18,42,.58),rgba(15,10,31,.72))}
+body.light .video-shade{background:linear-gradient(120deg,rgba(12,17,35,.52),rgba(12,18,42,.38),rgba(15,10,31,.52))}
+@keyframes ambientBg{0%,100%{background-position:0% 40%}50%{background-position:100% 60%}}
+body:before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background:radial-gradient(circle at 18% 24%,#ffd16612 0,transparent 28%),radial-gradient(circle at 82% 72%,#59e1ff10 0,transparent 30%);animation:ambientGlow 22s ease-in-out infinite alternate}
+@keyframes ambientGlow{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1%,1%,0) scale(1.06)}}
+header{position:relative;width:min(1150px,100%);margin:auto;text-align:center;padding:28px 150px 10px;min-height:150px}
+.badge{display:inline-block;padding:6px 12px;border:1px solid #ffffff30;border-radius:99px;color:var(--gold);font-size:19px;letter-spacing:1px;font-weight:800}
+h1{font-size:clamp(28px,5vw,46px);margin:12px 0 6px;line-height:1.1}
+.subtitle{margin:0;color:#c4cbe6}
+.layout{width:min(1150px,100%);margin:auto;padding:18px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.8fr);gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 55px #0003}
+.wheel-wrap{position:relative;width:min(100%,490px);aspect-ratio:1;margin:8px auto 18px}
+canvas{width:100%;height:100%;display:block;filter:drop-shadow(0 12px 22px #0005)}
+.pointer{position:absolute;top:50%;right:-3px;transform:translateY(-50%);width:0;height:0;border-top:19px solid transparent;border-bottom:19px solid transparent;border-right:38px solid var(--gold);z-index:3;filter:drop-shadow(0 4px 4px #0006)}
+.center-cap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(76px,19%,108px);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--panel);border:3px solid var(--gold);box-shadow:0 4px 18px #0006;overflow:hidden;pointer-events:none;z-index:2}.center-cap img{width:100%;height:100%;object-fit:contain;padding:5px}
+.status{text-align:center;color:#cbd4f5;min-height:25px}
+.winner-box{display:none;text-align:center;padding:16px;border-radius:16px;background:linear-gradient(110deg,#543e83,#8e3269);border:1px solid #ffd16670;margin:12px 0}
+.winner-box.show{display:block;animation:pop .35s ease}
+.winner-box small{display:block;color:#ffe5a1;font-weight:800;letter-spacing:2px}
+.winner-name{font-size:clamp(24px,4vw,38px);font-weight:900;overflow-wrap:anywhere;margin-top:4px}
+@keyframes pop{from{transform:scale(.94);opacity:.4}to{transform:scale(1);opacity:1}}
+button{border:0;border-radius:12px;padding:13px 16px;font-weight:800;font-size:15px;cursor:pointer;transition:transform .15s,opacity .15s}
+button:active{transform:scale(.98)}button:disabled{opacity:.45;cursor:not-allowed}
+.primary{background:linear-gradient(100deg,var(--gold),#ff9f43);color:#24152a;width:100%;font-size:18px;padding:16px}
+.secondary{background:#303b64;color:white}.danger{background:#612e4a;color:#ffdce8}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row button{flex:1}
+h2{font-size:19px;margin:0 0 12px}
+.muted{color:var(--muted);font-size:13px;line-height:1.5}
+textarea,input,select{width:100%;border:1px solid var(--line);background:var(--field);color:var(--text);border-radius:12px;padding:12px;font:inherit;outline:none}
+textarea{min-height:150px;resize:vertical}
+textarea:focus,input:focus,select:focus{border-color:var(--cyan)}
+.panel-section{border-top:1px solid #ffffff17;padding-top:16px;margin-top:16px}
+.hidden{display:none!important}
+.count{font-size:28px;font-weight:900;color:var(--gold)}
+.list{padding-left:22px;margin:0;max-height:220px;overflow:auto}
+.list li{padding:5px 0;color:#e4e8ff;overflow-wrap:anywhere}
+.list li span{color:#aeb8dd;font-size:12px}
+#toast{min-height:20px;margin:8px 0;color:var(--gold);font-size:13px}
+footer{text-align:center;color:#7f89b1;padding:4px 16px 26px;font-size:12px}
+
+.top-actions{position:absolute;right:16px;top:16px;display:flex;gap:8px;z-index:3}.top-actions button{padding:9px 12px}.brand-logo{position:absolute;left:18px;top:18px;width:112px;height:112px;object-fit:contain;display:block;filter:drop-shadow(0 8px 20px #0005)}
+.header-copy{padding-top:6px}.report-link{position:fixed;left:14px;bottom:14px;z-index:10;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:#015CE0;color:#fff;text-decoration:none;font-weight:800;box-shadow:0 8px 26px #0004}.report-link:hover{filter:brightness(1.08)}
+
+@media(prefers-reduced-motion:reduce){body,body:before{animation:none!important}}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px auto 0;padding:0 12px}.tabs button{background:var(--panel);border:1px solid var(--line);color:var(--text)}.tabs button.active{background:linear-gradient(100deg,var(--gold),#ff9f43);color:#24152a}.view{width:min(1150px,100%);margin:auto;padding:18px}.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;margin:12px 0}.toolbar input,.toolbar select,.member-form input,.member-form select{min-width:0}.roster-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:14px}.roster-member-card{min-width:0;border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(145deg,#ffffff0d,#80808008);box-shadow:0 8px 22px #0002;transition:transform .18s,border-color .18s}.roster-member-card:hover{transform:translateY(-2px);border-color:var(--gold)}.roster-member-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}.roster-member-name{font-size:18px;font-weight:900;overflow-wrap:anywhere}.roster-meta{font-size:13px;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}.roster-game{margin-top:12px;padding:11px;border:1px solid var(--line);border-radius:12px;background:#00000012}.roster-game-title{font-weight:800;overflow-wrap:anywhere}.roster-game-details{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.roster-tag{font-size:12px;border-radius:8px;padding:5px 8px;background:#80808020}.roster-empty{grid-column:1/-1;text-align:center;padding:22px;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:720px}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);font-size:14px}th{color:var(--gold);background:#80808012}td .muted{font-size:12px}.pill{display:inline-block;border-radius:999px;padding:4px 8px;font-size:12px;background:#1e8d6230;color:#4ad59a}.pill.off{background:#c83c5630;color:#ff8192}.member-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.member-form label{display:block;font-size:13px;color:var(--muted)}.member-form label input,.member-form label select{margin-top:5px}.game-row{display:grid;grid-template-columns:1fr 1fr .6fr 1fr auto;gap:8px;margin:8px 0}.game-row button{padding:9px}.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.admin-only-note{border:1px dashed var(--line);border-radius:12px;padding:12px;color:var(--muted);font-size:13px}.sound-frame{position:fixed;width:1px;height:1px;left:-10px;bottom:-10px;opacity:.01;pointer-events:none}
+@media(max-width:800px){.toolbar{grid-template-columns:1fr 1fr}.member-form{grid-template-columns:1fr}.game-row{grid-template-columns:1fr 1fr}.game-row button{grid-column:span 2}.top-actions{position:static;justify-content:flex-end;margin:10px 12px 0}header{padding:18px 12px 10px 104px;min-height:112px;text-align:left}.brand-logo{position:absolute;left:10px;top:18px;width:82px;height:82px;margin:0}.header-copy{padding-top:0}.tabs{padding:0 10px}.tabs button{flex:1 1 42%;padding:11px 8px}.view{padding:12px}.report-link{left:10px;bottom:10px;font-size:10px;padding:8px 8px}}
+@media(max-width:420px){.toolbar{grid-template-columns:1fr}.card{padding:13px}.game-row{grid-template-columns:1fr}.game-row button{grid-column:auto}.form-actions{flex-wrap:wrap}.form-actions button{flex:1}.tabs button{font-size:13px}.report-link{max-width:calc(100vw - 20px)}}
+
+@media(max-width:800px){.layout{grid-template-columns:1fr;padding:12px}.card{padding:16px}header{padding-top:22px}.wheel-wrap{width:min(100%,410px)}}
+
+/* Thể lệ event Clan */
+.event-overlay{position:fixed;inset:0;z-index:50;background:#050817d9;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.event-dialog{width:min(850px,100%);max-height:min(90vh,900px);overflow-y:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:clamp(16px,3vw,28px);box-shadow:0 24px 90px #0009;margin:auto}
+.event-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.event-head h2{font-size:clamp(21px,4vw,28px);margin:0}.event-close{font-size:22px;padding:6px 12px;flex-shrink:0}
+.event-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.event-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#8080800d}.event-card h3{margin:0 0 10px;color:var(--gold);font-size:18px}.event-card ul{padding-left:21px;margin:8px 0 0}.event-card li{margin:7px 0;line-height:1.5}.event-prize{display:inline-block;border-radius:999px;background:#ffd16620;color:var(--gold);font-weight:900;padding:7px 11px;margin-top:5px}.event-rounds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.event-round{border:1px solid var(--line);border-radius:12px;padding:10px}.event-round strong{display:block;color:var(--gold);margin-bottom:3px}.event-note{margin-top:14px;padding:12px;border:1px dashed var(--gold);border-radius:12px;line-height:1.5}
+@media(max-width:620px){.event-grid{grid-template-columns:1fr}.event-dialog{max-height:94vh}.event-rounds{grid-template-columns:1fr 1fr}}
+
+/* Hiệu ứng button khi di chuột */
+button {
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+    transform-origin: center;
+}
+
+/* Hover: nhún lên và phát sáng */
+button:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 8px 22px rgba(0, 220, 255, 0.35);
+    filter: brightness(1.15);
+}
+
+/* Khi nhấn nút */
+button:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow: 0 2px 8px rgba(0, 220, 255, 0.2);
+}
+
+/* Hiệu ứng rung nhẹ khi hover */
+@keyframes buttonWiggle {
+    0%, 100% { rotate: 0deg; }
+    25% { rotate: -1deg; }
+    75% { rotate: 1deg; }
+}
+
+button:hover {
+    animation: buttonWiggle 0.3s ease-in-out;
+}
+
+/* Hỗ trợ người dùng tắt hiệu ứng chuyển động */
+@media (prefers-reduced-motion: reduce) {
+    button {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.top-actions button {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+
+/* Quỹ Event 20K */
+.payment-public{display:grid;grid-template-columns:minmax(180px,260px) 1fr;gap:18px;align-items:start;padding:16px;margin:14px 0;border:1px solid var(--border, #46506b);border-radius:16px;background:rgba(20,28,52,.72)}
+.payment-qr-box{text-align:center}
+.payment-qr{display:block;width:min(100%,230px);aspect-ratio:1;object-fit:contain;margin:10px auto;border-radius:12px;background:#fff;padding:8px;box-sizing:border-box}
+.payment-qr-empty{padding:28px 12px;border:1px dashed #8792ad;border-radius:12px;color:inherit;font-size:13px}
+.payment-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.payment-person{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.07)}
+.payment-state{font-size:12px;font-weight:800;white-space:nowrap}
+.payment-state.paid{color:#48e0a1}.payment-state.unpaid{color:#ffc36b}
+.payment-admin-settings{margin:14px 0;padding:14px;border:1px solid var(--border, #46506b);border-radius:14px}
+.payment-admin-settings input[type=file]{max-width:100%;margin:8px 0}
+.payment-admin-preview{max-width:180px;max-height:180px;object-fit:contain;background:white;padding:6px;border-radius:10px;display:block;margin:10px 0}
+.paid-checkbox{width:19px;height:19px;accent-color:#20b879;cursor:pointer}
+@media(max-width:600px){.payment-public{grid-template-columns:1fr}.payment-list{grid-template-columns:1fr 1fr}}
+
+/* Lớp tuyết phủ toàn màn hình */
+#snowfall {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Nút Zalo nổi ở góc màn hình */
+.report-link.zalo-pulse {
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    z-index: 20;
+
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    border: 2px solid rgba(255,255,255,.9);
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #087ff5;
+    color: #fff;
+    text-decoration: none;
+
+    box-shadow: 0 0 12px rgba(0,145,255,.45);
+    isolation: isolate;
+    transition: transform .2s ease;
+}
+
+/* Vòng sóng xanh lan tỏa */
+.report-link.zalo-pulse::before,
+.report-link.zalo-pulse::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border: 2px solid rgba(0,170,255,.7);
+    border-radius: 50%;
+    z-index: -1;
+    animation: zaloWave 2.4s ease-out infinite;
+    pointer-events: none;
+}
+
+.report-link.zalo-pulse::after {
+    animation-delay: 1.2s;
+}
+
+@keyframes zaloWave {
+    0% {
+        transform: scale(.85);
+        opacity: .8;
+    }
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+/* Biểu tượng rung nhẹ */
+.zalo-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fff;
+    color: #087ff5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    font-weight: 900;
+    font-size: 25px;
+    animation: zaloShake 2s ease-in-out infinite;
+}
+
+@keyframes zaloShake {
+    0%, 85%, 100% { transform: rotate(0deg); }
+    88% { transform: rotate(-10deg); }
+    92% { transform: rotate(10deg); }
+    96% { transform: rotate(-6deg); }
+}
+
+.report-link.zalo-pulse:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(0,170,255,.75);
+}
+
+@media (max-width: 600px) {
+    .report-link.zalo-pulse {
+        width: 48px;
+        height: 48px;
+        left: 12px;
+        bottom: 12px;
+    }
+
+    .zalo-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .report-link.zalo-pulse::before,
+    .report-link.zalo-pulse::after,
+    .zalo-icon {
+        animation: none;
+    }
+}
+
+/* Nút Zalo hình chữ nhật có viền */
+.report-link.zalo-pulse {
+    width: auto;
+    height: 46px;
+    padding: 0 8px 0 8px;
+    gap: 9px;
+
+    border: 2px solid #35bfff;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(135deg, #087ff5, #0066d9);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(0, 170, 255, .3);
+}
+
+/* Biểu tượng Z */
+.report-link.zalo-pulse .zalo-icon {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 8px;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+/* Chữ Zalo */
+.report-link.zalo-pulse .zalo-text {
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: .4px;
+}
+
+/* Sóng xanh bao quanh nút */
+.report-link.zalo-pulse::before,
+.report-link.zalo-pulse::after {
+    border-radius: 14px;
+    border-color: rgba(0, 190, 255, .65);
+}
+
+@media (max-width: 600px) {
+    .report-link.zalo-pulse {
+        height: 42px;
+        padding: 0 12px 0 7px;
+        gap: 7px;
+    }
+
+    .report-link.zalo-pulse .zalo-text {
+        font-size: 14px;
+    }
+}
+.tabs button.register-btn {
+    position: relative;
+    border: 1px solid rgba(66, 234, 255, 0.65) !important;
+    animation: registerGlow 3s ease-in-out infinite;
+    box-shadow: 0 0 4px rgba(0, 217, 255, 0.2);
+}
+
+@keyframes registerGlow {
+    0%, 100% {
+        box-shadow: 0 0 3px rgba(0, 217, 255, 0.15);
+    }
+    50% {
+        box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+    }
+}
+
+.tabs button.register-btn::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 1px solid rgba(0, 220, 255, 0.5);
+    border-radius: inherit;
+    pointer-events: none;
+    animation: registerWave 3.5s ease-out infinite;
+}
+
+@keyframes registerWave {
+    0% {
+        transform: scale(1);
+        opacity: 0.35;
+    }
+    100% {
+        transform: scale(1.08, 1.3);
+        opacity: 0;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="snowfall" aria-hidden="true"></canvas>
+
+<img
+    class="image-background"
+    src="/background.jpg"
+    alt=""
+    aria-hidden="true"
+/>
+<div class="video-shade" aria-hidden="true"></div>
+<div class="video-shade" aria-hidden="true"></div>
+<div class="top-actions"><button data-view="adminMembersView">🔐 Đăng nhập </button><button class="secondary" id="themeBtn" type="button" aria-label="Chuyển giao diện sáng tối" title="Chuyển giao diện sáng/tối">🌙</button></div>
+<header>
+  <img class="brand-logo" src="/logo-songviae.png" alt="Logo Clan Sống Vì AE">
+  <div class="header-copy"><span class="badge">CLAN HUB • SỐNG VÌ AE</span>
+  <h2>ĐOÀN KẾT • CHIẾN ĐẤU • VUI LÀ CHÍNH</h2>
+  <p class="subtitle">Nơi các anh tài hội tụ</p></div>
+</header>
+<nav class="tabs"><button class="active register-btn" data-view="registerView">📝 Đăng ký thành viên</button><button data-view="wheelView">🎡 Vòng quay</button><button data-view="membersView">👥 Thành viên Clan</button><button type="button" id="eventRulesBtn">📜 Thể lệ Event Clan</button></nav>
+<div class="event-overlay hidden" id="eventRulesOverlay" role="dialog" aria-modal="true" aria-labelledby="eventRulesTitle">
+  <section class="event-dialog">
+    <div class="event-head"><h2 id="eventRulesTitle">📜 Thể lệ Event Clan Sống Vì AE</h2><button type="button" class="secondary event-close" id="closeEventRulesBtn" aria-label="Đóng thể lệ">✕</button></div>
+    <div class="event-grid">
+      <article class="event-card"><h3>⚔️ Event ngày 15 hằng tháng — War thường</h3><p>Chọn ra <strong>3 combo 3 sao dị nhất</strong> trong war thường.</p><ul><li><strong>Thể lệ:</strong> Đánh ngang base, ví dụ 13 vs 13, 14 vs 14…</li><li>Combo được xét là combo đạt 3 sao và có cách đánh độc đáo.</li></ul><div class="event-prize">🎁 Phần thưởng: Thẻ cào 20K</div></article>
+      <article class="event-card"><h3>🎡 Event War 7 ngày — Vòng quay may mắn</h3><p><strong>Quỹ giải thưởng dự kiến: 500K</strong>, chia thành 6 vòng quay theo cơ cấu bên dưới.</p><ul><li><strong>Điều kiện tham gia:</strong> Đóng 20K vào quỹ.</li><li><strong>Thể lệ:</strong> Người đã đóng 20K phải war đủ cả 7 ngày; các thành viên còn lại war thay phiên.</li></ul><div class="event-prize">💰 Tổng 6 vòng: 500K</div></article>
+    </div>
+    <div class="panel-section"><h3 style="margin:0 0 8px;color:var(--gold)">🏆 Cơ cấu 6 vòng quay</h3><div class="event-rounds">
+      <div class="event-round"><strong>Vòng 1 — 150K</strong><span>Cho anh em đóng quỹ và war đủ 7 ngày.</span></div>
+      <div class="event-round"><strong>Vòng 2 — 100K</strong><span>Dành cho anh em đạt đủ 21 sao.</span></div>
+      <div class="event-round"><strong>Vòng 3 — 100K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
+      <div class="event-round"><strong>Vòng 4 — 50K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
+      <div class="event-round"><strong>Vòng 5 — 50K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
+      <div class="event-round"><strong>Vòng 6 — 50K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
+    </div><div class="event-note">📌 <strong>Nguyên tắc:</strong> Mỗi người chỉ được quay trúng thưởng <strong>1 lần</strong>, không nhận giải lần thứ hai. Vòng 1 và vòng 2 áp dụng điều kiện riêng như mô tả; các vòng còn lại dành cho tất cả người tham gia đủ điều kiện.</div></div>
+  </section>
+</div>
+<main class="layout hidden" id="wheelView">
+  <section class="card">
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <canvas id="wheel" width="900" height="900" aria-label="Vòng quay may mắn"></canvas>
+      <div class="center-cap"><img src="/logo-songviae.png" alt="Logo Clan Sống Vì AE"></div>
+    </div>
+    <div class="status" id="status">Đang kết nối phòng chơi…</div>
+    <div class="winner-box" id="winnerBox"><small>🏆 NGƯỜI TRÚNG THƯỞNG</small><div class="winner-name" id="winnerName"></div></div>
+    <div class="muted" style="text-align:center">Danh sách và kết quả được đồng bộ cho mọi người đang mở trang này.</div>
+  </section>
+
+  <aside class="card">
+    <h2>📊 Thông tin lượt quay</h2>
+    <div class="row">
+      <div style="flex:1"><div class="muted">Người tham gia</div><div class="count" id="peopleCount">0</div></div>
+      <div style="flex:1"><div class="muted">Đã trúng giải</div><div class="count" id="winnerCount">0</div></div>
+    </div>
+    <div class="panel-section">
+      <h2>🏆 Lịch sử trúng thưởng</h2>
+      <ol class="list" id="winnerList"><li>Chưa có kết quả</li></ol>
+    </div>
+    <div class="panel-section">
+      <h2>🔐 Khu vực Admin</h2>
+      <div id="loginArea">
+        <p class="muted">Chỉ Admin có mật khẩu mới được quay và quản lý danh sách.</p>
+        <input id="password" type="password" placeholder="Nhập mật khẩu Admin" autocomplete="current-password">
+        <div style="height:8px"></div>
+        <button class="secondary" id="loginBtn" style="width:100%">Đăng nhập</button>
+      </div>
+      <div id="adminArea" class="hidden">
+        <p class="muted">Mỗi người chỉ trúng một lần. Nhập mỗi tên trên một dòng hoặc ngăn cách bằng dấu phẩy.</p>
+        <textarea id="namesInput" placeholder="Nguyễn Văn A&#10;Trần Thị B&#10;Lê Văn C"></textarea>
+        <div class="row" style="margin-top:8px">
+          <button class="secondary" id="saveNamesBtn">Lưu danh sách</button>
+          <button class="danger" id="resetBtn">Đặt lại giải</button>
+        </div>
+        <div style="height:10px"></div>
+        <button class="primary" id="spinBtn">🎡 QUAY NGAY</button>
+        <p class="muted">Kết quả được chọn ở máy chủ; người xem không cần bấm gì.</p>
+      </div>
+      <div id="toast" role="status"></div>
+    </div>
+  </aside>
+</main>
+
+<section class="view" id="registerView"><div class="card"><h2>📝 Đăng ký thành viên Clan Sống Vì AE</h2><p class="muted">Vui lòng điền đầy đủ tất cả thông tin. Sau khi lưu, thành viên sẽ xuất hiện ngay trong danh sách Clan.</p><form id="selfRegisterForm"><div class="member-form"><label>Họ tên / Biệt danh *<input name="name" required maxlength="200" placeholder="Tên bạn trong Clan"></label><label>Số điện thoại *<input name="phone" required inputmode="tel" maxlength="30" placeholder="Số điện thoại liên hệ"></label><label>Tên tài khoản Zalo *<input name="zaloName" required maxlength="200" placeholder="Tên Zalo"></label><label>Trạng thái hoạt động *<select name="status" required><option value="" disabled selected>Chọn trạng thái</option><option>Đang hoạt động</option><option>Không hoạt động</option></select></label><label>Tên ngân hàng *<input name="bankName" required maxlength="200"></label><label>Số tài khoản ngân hàng *<input name="bankAccount" required inputmode="numeric" maxlength="60"></label><label>Tên người nhận *<input name="bankRecipient" required maxlength="200"></label></div><div class="panel-section"><div class="section-title"><h2>ID Game sở hữu</h2><button type="button" class="secondary" id="selfAddGameIdBtn">＋ Thêm ID</button></div><div id="selfGameIdsEditor"></div><p class="muted">Bạn có thể đăng ký nhiều tài khoản game. Mỗi ID gồm Game Tag, tên trong game, Town Hall và cấp bậc.</p></div><div class="form-actions"><button type="reset" class="secondary">Nhập lại</button><button type="submit" class="primary" style="width:auto">Gửi đăng ký</button></div><p id="registerMessage" role="status" aria-live="polite"></p></form></div></section>
+<section class="view hidden" id="membersView"><div class="card"><div class="section-title"><h2>👥 Danh sách thành viên Sống Vì AE</h2><span class="muted" id="rosterCount">0 thành viên</span></div><section class="payment-public" aria-labelledby="paymentTitle"><div class="payment-qr-box"><h3 id="paymentTitle">💸 Quỹ Event Clan — 20.000đ</h3><p class="muted">Quét mã QR để chuyển khoản</p><div id="publicPaymentQrWrap"><div class="payment-qr-empty">Admin chưa cập nhật mã QR chuyển khoản.</div></div><p class="muted">Sau khi chuyển khoản, liên hệ Admin để xác nhận.</p></div><div><h3>📋 Tình trạng đóng quỹ</h3><p class="muted" id="paymentSummary">Đang tải trạng thái đóng quỹ…</p><div class="payment-list" id="publicPaymentList"></div></div></section><div class="toolbar"><input id="filterName" placeholder="Tìm tên, Zalo, Game Tag…"><select id="filterTH"><option value="">Tất cả Town Hall</option></select><select id="filterRank"><option value="">Tất cả cấp bậc</option><option>Thủ lĩnh</option><option>Đồng thủ lĩnh</option><option>Hội viên</option></select><select id="filterStatus"><option value="">Tất cả trạng thái</option><option>Đang hoạt động</option><option>Không hoạt động</option></select></div><div class="roster-cards" id="rosterCards"><div class="roster-empty">Đang tải danh sách…</div></div><p class="muted">Thông tin ngân hàng và số điện thoại chỉ hiển thị trong khu vực Admin.</p></div></section>
+<section class="view hidden" id="adminMembersView"><div class="card"><h2>🔐 Đăng nhập </h2><div id="memberAdminLogin"><p class="muted">Đăng nhập để quản lý thành viên và xuất danh sách Excel-compatible CSV.</p><input id="memberAdminPassword" type="password" placeholder="Mật khẩu" autocomplete="current-password"><div style="height:8px"></div><button class="secondary" id="memberAdminLoginBtn">Login</button></div><div id="memberAdminPanel" class="hidden"><div class="section-title"><p class="muted">Mỗi thành viên có thể sở hữu nhiều ID game.</p><div class="row"><button class="secondary" id="newMemberBtn">＋ Thêm thành viên</button><button class="secondary" id="exportBtn">⬇ Xuất Excel (CSV)</button><button class="danger" id="logoutMemberAdminBtn">Đăng xuất</button></div></div><div id="memberAdminToast" class="muted" role="status"></div><section class="payment-admin-settings"><h3>💳 Quản lý QR nhận quỹ 20K</h3><p class="muted">Chọn ảnh QR ngân hàng của Admin rồi lưu. Ảnh sẽ hiển thị ở mục Thành viên Clan.</p><input type="file" id="paymentQrFile" accept="image/png,image/jpeg,image/webp"><img id="paymentQrPreview" class="payment-admin-preview hidden" alt="Xem trước mã QR"><div class="row"><button type="button" class="secondary" id="savePaymentQrBtn">Lưu mã QR</button><button type="button" class="danger" id="removePaymentQrBtn">Xóa mã QR</button></div></section><div class="table-wrap"><table><thead><tr><th>Họ tên</th><th>Điện thoại</th><th>ID game</th><th>Trạng thái</th><th>Ngân hàng</th><th>Đã đóng quỹ 20K</th><th>Thao tác</th></tr></thead><tbody id="adminRosterBody"><tr><td colspan="7">Đăng nhập để xem dữ liệu.</td></tr></tbody></table></div><div class="panel-section hidden" id="memberEditor"><div class="section-title"><h2 id="memberEditorTitle">Thêm thành viên</h2><button class="danger" id="cancelMemberEdit">Đóng</button></div><form id="memberForm"><div class="member-form"><label>Họ tên / Biệt danh *<input name="name" required></label><label>Số điện thoại *<input name="phone" required inputmode="tel"></label><label>Tên tài khoản Zalo<input name="zaloName"></label><label>Trạng thái<select name="status"><option>Đang hoạt động</option><option>Không hoạt động</option></select></label><label>Tên ngân hàng<input name="bankName"></label><label>Số tài khoản<input name="bankAccount" inputmode="numeric"></label><label>Tên người nhận<input name="bankRecipient"></label></div><div class="panel-section"><div class="section-title"><h2>ID Game sở hữu</h2><button type="button" class="secondary" id="addGameIdBtn">＋ Thêm ID</button></div><div id="gameIdsEditor"></div><p class="muted">Có thể thêm nhiều ID. Town Hall chỉ chọn từ TH1 đến TH19; cấp bậc áp dụng cho từng ID game.</p></div><div class="form-actions"><button type="button" class="secondary" id="cancelMemberEdit2">Hủy</button><button type="submit" class="primary" style="width:auto">Lưu thành viên</button></div></form></div></div></div></section>
+<iframe class="sound-frame" id="youtubeAudio" title="Nhạc Clan khi quay" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+
+<a
+  href="https://zalo.me/0395733468"
+  class="report-link zalo-pulse"
+  target="_blank"
+  rel="noopener noreferrer"
+  title="Báo cáo sự cố qua Zalo"
+  aria-label="Báo cáo sự cố qua Zalo">
+
+  <span class="zalo-text">Zalo</span>
+</a>
+<footer>Copyright © KelvinThang - Clash of Clan - Song vi AE</footer>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+const canvas = document.getElementById('wheel');
+const ctx = canvas.getContext('2d');
+const colors = ['#ff5d8f','#ffb84d','#43d9cf','#6288ff','#b47aff','#ff7966','#6ed0ff','#f06db5','#b4df5b','#f58a4b'];
+let names = [], winners = [], lastWinner = null, rotation = 0, spinning = false, isAdmin = false, spinTimer = null;
+const $ = id => document.getElementById(id);
+function drawWheel(angle=rotation) {
+  const n = Math.max(names.length, 1), cx=450, cy=450, r=420;
+  ctx.clearRect(0,0,900,900);
+  if (!names.length) {
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle='#2d3964';ctx.fill();
+    ctx.fillStyle='#dce4ff';ctx.font='bold 34px system-ui';ctx.textAlign='center';ctx.fillText('Chờ Admin thêm tên',cx,cy);return;
+  }
+  const arc=Math.PI*2/n;
+  for(let i=0;i<n;i++){
+    const start=angle+i*arc-Math.PI/2, end=start+arc;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
+    ctx.fillStyle=colors[i%colors.length];ctx.fill();
+    ctx.strokeStyle='#ffffffb0';ctx.lineWidth=3;ctx.stroke();
+    if(n<=90){
+      ctx.save();ctx.translate(cx,cy);ctx.rotate(start+arc/2);
+      ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillStyle='#fff';
+      const fontSize=Math.max(11,Math.min(25,240/n));ctx.font=`bold ${fontSize}px system-ui`;
+      let label=names[i];const maxChars=Math.max(7,Math.floor(24/(fontSize/16)));
+      if(label.length>maxChars)label=label.slice(0,maxChars-1)+'…';
+      ctx.shadowColor='#0006';ctx.shadowBlur=3;ctx.fillText(label,r-24,0);ctx.restore();
+    }
+  }
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='#ffd166';ctx.lineWidth=10;ctx.stroke();
+}
+function renderState(s) {
+  names=s.names||[];winners=s.winners||[];lastWinner=s.lastWinner||null;
+  $('peopleCount').textContent=names.length;
+  $('winnerCount').textContent=winners.length;
+  if(isAdmin && document.activeElement!==$('namesInput')) $('namesInput').value=names.join('\n');
+  $('winnerList').innerHTML='';
+  if(!winners.length){$('winnerList').innerHTML='<li>Chưa có kết quả</li>'}
+  else winners.slice().reverse().forEach(w=>{
+    const li=document.createElement('li');li.textContent=w.name+' ';
+    const small=document.createElement('span');small.textContent='— lượt '+w.round;li.appendChild(small);$('winnerList').appendChild(li);
+  });
+  if(lastWinner && !spinning) showWinner(lastWinner.name);
+  else if(!lastWinner) $('winnerBox').classList.remove('show');
+  drawWheel();
+  $('status').textContent=names.length?`Đã có ${names.length} người trong danh sách. ${spinning?'Vòng quay đang chạy…':'Sẵn sàng chờ lượt quay tiếp theo.'}`:'Admin chưa nhập danh sách người tham gia.';
+}
+function showWinner(name){$('winnerName').textContent=name;$('winnerBox').classList.add('show')}
+socket.on('connect',()=>{$('status').textContent='Đã kết nối — đang đồng bộ dữ liệu…'});
+socket.on('disconnect',()=>{$('status').textContent='Mất kết nối. Đang thử kết nối lại…'});
+socket.on('state:update',renderState);
+socket.on('admin:login-result',r=>{
+  if(r.ok){isAdmin=true;$('loginArea').classList.add('hidden');$('adminArea').classList.remove('hidden');$('toast').textContent='Đăng nhập Admin thành công.';$('namesInput').value=names.join('\n')}
+  else $('toast').textContent=r.message||'Đăng nhập thất bại.';
+});
+socket.on('admin:error',msg=>$('toast').textContent=msg);
+socket.on('admin:notice',msg=>$('toast').textContent=msg);
+socket.on('spin:start',data=>{
+  spinning=true;$('spinBtn').disabled=true;$('winnerBox').classList.remove('show');
+  $('status').textContent='🎡 Đang quay… lượt '+data.round;
+  const targetIndex=names.indexOf(data.winner);
+  const n=Math.max(names.length,1), arc=Math.PI*2/n;
+  // Pointer is at 3 o'clock (right). Align the winning segment center to angle 0.
+  const current=rotation;
+  const normalized=((current%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+  const desired=((Math.PI/2-(targetIndex*arc+arc/2))%(Math.PI*2)+(Math.PI*2))%(Math.PI*2);
+  const extraTurns=8*Math.PI*2;
+  const delta=extraTurns+((desired-normalized+Math.PI*2)%(Math.PI*2));
+  const start=performance.now(), duration=data.duration||5200;
+  function frame(now){
+    const t=Math.min(1,(now-start)/duration), eased=1-Math.pow(1-t,4);
+    rotation=current+delta*eased;drawWheel(rotation);
+    if(t<1) requestAnimationFrame(frame);
+    else {
+      rotation=((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+      spinning=false;showWinner(data.winner);
+      $('status').textContent='🎉 Đã công bố kết quả lượt '+data.round;
+      if(isAdmin)$('spinBtn').disabled=false;
+    }
+  }
+  requestAnimationFrame(frame);
+  if(spinTimer)clearTimeout(spinTimer);
+  spinTimer=setTimeout(()=>{spinning=false;if(isAdmin)$('spinBtn').disabled=false},duration+150);
+});
+$('loginBtn').addEventListener('click',()=>{socket.emit('admin:login',$('password').value);$('toast').textContent='Đang kiểm tra mật khẩu…'});
+$('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
+$('saveNamesBtn').addEventListener('click',()=>socket.emit('admin:set-names',$('namesInput').value));
+$('spinBtn').addEventListener('click',()=>{startAudio();if(!spinning){socket.emit('admin:spin');$('spinBtn').disabled=true}});
+$('resetBtn').addEventListener('click',()=>{if(confirm('Đặt lại toàn bộ lịch sử trúng thưởng? Danh sách thành viên sẽ được giữ nguyên.'))socket.emit('admin:reset-winners')});
+
+// Theme toggle
+if(localStorage.getItem('svae-theme')==='light')document.body.classList.add('light');
+function updateThemeButton(){ $('themeBtn').textContent=document.body.classList.contains('light')?'🌙':'☀️'; }
+updateThemeButton();$('themeBtn').addEventListener('click',()=>{document.body.classList.toggle('light');localStorage.setItem('svae-theme',document.body.classList.contains('light')?'light':'dark');updateThemeButton()});
+let audioStarted=false;
+function startAudio(){if(audioStarted)return;audioStarted=true;$('youtubeAudio').src='https://www.youtube-nocookie.com/embed/atq9S7pp1rQ?autoplay=1&loop=1&playlist=atq9S7pp1rQ';}
+// Main navigation
+const eventRulesOverlay=$('eventRulesOverlay');
+$('eventRulesBtn').addEventListener('click',()=>{eventRulesOverlay.classList.remove('hidden');$('closeEventRulesBtn').focus()});
+$('closeEventRulesBtn').addEventListener('click',()=>eventRulesOverlay.classList.add('hidden'));
+eventRulesOverlay.addEventListener('click',e=>{if(e.target===eventRulesOverlay)eventRulesOverlay.classList.add('hidden')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')eventRulesOverlay.classList.add('hidden')});
+for(const btn of document.querySelectorAll('[data-view]'))btn.addEventListener('click',()=>{document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b===btn));['wheelView','registerView','membersView','adminMembersView'].forEach(id=>$(id).classList.toggle('hidden',id!==btn.dataset.view));if(btn.dataset.view==='membersView')loadPublicRoster();if(btn.dataset.view==='adminMembersView'&&memberAdminToken)loadAdminRoster()});
+let publicMembers=[],memberAdminToken='',editingMemberId=null,memberDraftGames=[];
+const rankOptions=['Thủ lĩnh','Đồng thủ lĩnh','Hội viên'];
+function addSelfGameRow(game={}){const row=document.createElement('div');row.className='game-row';row.innerHTML=`<input placeholder="Game Tag" aria-label="Game Tag" maxlength="30" required value="${escapeHTML(game.gameTag||'')}"><input placeholder="Tên trong Game" aria-label="Tên trong Game" maxlength="200" required value="${escapeHTML(game.gameName||'')}"><select aria-label="Town Hall" required><option value="" disabled ${game.townHall?'':'selected'}>Chọn TH</option>${Array.from({length:19},(_,i)=>String(i+1)).map(t=>`<option value="${t}" ${String(game.townHall||'')===t?'selected':''}>TH ${t}</option>`).join('')}</select><select aria-label="Cấp bậc" required><option value="" disabled ${game.rank?'':'selected'}>Chọn cấp bậc</option>${rankOptions.map(r=>`<option ${r===(game.rank||'')?'selected':''}>${r}</option>`).join('')}</select><button type="button" class="danger">Xóa ID</button>`;row.querySelector('button').addEventListener('click',()=>{if($('selfGameIdsEditor').children.length>1)row.remove();else {row.querySelectorAll('input').forEach(i=>i.value='');row.querySelector('select').value=''}});$('selfGameIdsEditor').appendChild(row)}
+$('selfAddGameIdBtn').addEventListener('click',()=>addSelfGameRow());addSelfGameRow();
+$('selfRegisterForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget,msg=$('registerMessage');const gameIds=[...$('selfGameIdsEditor').querySelectorAll('.game-row')].map(r=>{const x=r.querySelectorAll('input,select');return {gameTag:x[0].value.trim(),gameName:x[1].value.trim(),townHall:x[2].value.trim(),rank:x[3].value}});if(!gameIds.length||gameIds.some(g=>!g.gameTag||!g.gameName||!g.townHall||!g.rank)){msg.textContent='Vui lòng điền đầy đủ thông tin cho tất cả ID game.';msg.style.color='#ff8192';return}const body={name:f.elements.name.value.trim(),phone:f.elements.phone.value.trim(),zaloName:f.elements.zaloName.value.trim(),status:f.elements.status.value,bankName:f.elements.bankName.value.trim(),bankAccount:f.elements.bankAccount.value.trim(),bankRecipient:f.elements.bankRecipient.value.trim(),gameIds};msg.textContent='Đang lưu thông tin…';try{const r=await fetch('/api/register-member',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw new Error(d.error||'Không gửi được đăng ký.');msg.textContent=d.message;msg.style.color='var(--gold)';f.reset();$('selfGameIdsEditor').innerHTML='';addSelfGameRow();await loadPublicRoster()}catch(err){msg.textContent=err.message;msg.style.color='#ff8192'}});
+function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function loadPublicRoster(){try{const r=await fetch('/api/members');const d=await r.json();publicMembers=d.members||[];const ths=[...new Set(publicMembers.flatMap(m=>(m.gameIds||[]).map(g=>g.townHall).filter(Boolean)))].sort((a,b)=>Number(b)-Number(a));const old=$('filterTH').value;$('filterTH').innerHTML='<option value="">Tất cả Town Hall</option>'+ths.map(t=>`<option value="${escapeHTML(t)}">TH ${escapeHTML(t)}</option>`).join('');$('filterTH').value=old;renderPublicRoster();loadPaymentInfo()}catch{$('rosterCards').innerHTML='<div class="roster-empty">Không tải được danh sách. Vui lòng thử lại.</div>'}}
+function renderPublicRoster(){const q=$('filterName').value.trim().toLowerCase(),th=$('filterTH').value,rank=$('filterRank').value,status=$('filterStatus').value;const cards=[];for(const m of publicMembers){if(status&&m.status!==status)continue;const games=m.gameIds||[];const memberMatch=[m.name,m.zaloName].some(x=>String(x||'').toLowerCase().includes(q));const matched=games.filter(g=>(!th||String(g.townHall||'')===th)&&(!rank||g.rank===rank)&&(!q||memberMatch||[g.gameTag,g.gameName].some(x=>String(x||'').toLowerCase().includes(q))));const memberOnlyMatch=(!games.length&&!th&&!rank)&&(!q||memberMatch);if(!matched.length&&!memberOnlyMatch)continue;const gameCards=matched.map(g=>`<div class="roster-game"><div class="roster-game-title">🎮 ${escapeHTML(g.gameName||'Chưa có tên game')}</div><div class="roster-meta">Game Tag: ${escapeHTML(g.gameTag||'—')}</div><div class="roster-game-details"><span class="roster-tag">🏰 TH ${escapeHTML(g.townHall||'—')}</span><span class="roster-tag">⭐ ${escapeHTML(g.rank||'Hội viên')}</span></div></div>`).join('');cards.push(`<article class="roster-member-card"><div class="roster-member-head"><div><div class="roster-member-name">👤 ${escapeHTML(m.name||'Chưa có tên')}</div><div class="roster-meta">Zalo: ${escapeHTML(m.zaloName||'—')}</div></div><span class="pill ${m.status==='Không hoạt động'?'off':''}">${escapeHTML(m.status||'Chưa rõ trạng thái')}</span></div><div class="roster-meta">Tài khoản game: ${matched.length} / ${games.length}</div><div class="payment-state ${m.paymentPaid?'paid':'unpaid'}">${m.paymentPaid?'✓ Đã đóng quỹ 20K':'○ Chưa đóng quỹ 20K'}</div>${gameCards||'<div class="roster-meta">Chưa đăng ký ID game.</div>'}</article>`)}$('rosterCount').textContent=cards.length+' thành viên';$('rosterCards').innerHTML=cards.join('')||'<div class="roster-empty">Không tìm thấy thành viên phù hợp.</div>'}
+['filterName','filterTH','filterRank','filterStatus'].forEach(id=>$(id).addEventListener(id==='filterName'?'input':'change',renderPublicRoster));
+async function adminFetch(url,opts={}){const r=await fetch(url,{...opts,headers:{'Content-Type':'application/json','Authorization':'Bearer '+memberAdminToken,...(opts.headers||{})}});if(!r.ok){let d={};try{d=await r.json()}catch{}throw new Error(d.error||'Có lỗi xảy ra.')}if(r.headers.get('content-type')?.includes('application/json'))return r.json();return r;}
+$('memberAdminLoginBtn').addEventListener('click',async()=>{const msg=$('memberAdminToast');try{const r=await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('memberAdminPassword').value})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Đăng nhập thất bại');memberAdminToken=d.token;$('memberAdminLogin').classList.add('hidden');$('memberAdminPanel').classList.remove('hidden');msg.textContent='Đăng nhập thành công.';await loadAdminRoster()}catch(e){msg.textContent=e.message}});
+$('memberAdminPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('memberAdminLoginBtn').click()});
+async function loadAdminRoster(){try{const d=await adminFetch('/api/admin/members');const members=d.members||[];$('adminRosterBody').innerHTML=members.map(m=>`<tr><td>${escapeHTML(m.name)}<br><span class="muted">Zalo: ${escapeHTML(m.zaloName||'—')}</span></td><td>${escapeHTML(m.phone)}</td><td>${(m.gameIds||[]).length} ID<br><span class="muted">${(m.gameIds||[]).map(g=>escapeHTML(g.gameTag||g.gameName||'ID')).join(', ')}</span></td><td>${escapeHTML(m.status)}</td><td>${escapeHTML(m.bankName||'—')}<br><span class="muted">${escapeHTML(m.bankAccount||'')}</span></td><td><label style="display:flex;align-items:center;gap:7px"><input class="paid-checkbox" type="checkbox" ${m.paymentPaid?'checked':''} onchange="setMemberPaid('${m.id}',this.checked)" aria-label="Đánh dấu ${escapeHTML(m.name)} đã đóng quỹ 20K"><span>${m.paymentPaid?'Đã đóng':'Chưa đóng'}</span></label></td><td><button class="secondary" onclick="editMember('${m.id}')">Sửa</button> <button class="danger" onclick="deleteMember('${m.id}')">Xóa</button></td></tr>`).join('')||'<tr><td colspan="7">Chưa có thành viên. Nhấn Thêm thành viên để bắt đầu.</td></tr>'}catch(e){$('memberAdminToast').textContent=e.message}}
+async function loadPaymentInfo(){try{const r=await fetch('/api/payment-info');const d=await r.json();const wrap=$('publicPaymentQrWrap');if(d.qr){wrap.innerHTML=`<img class="payment-qr" src="${d.qr}" alt="QR chuyển khoản quỹ Event Clan">`}else{wrap.innerHTML='<div class="payment-qr-empty">Admin chưa cập nhật mã QR chuyển khoản.</div>'}const list=$('publicPaymentList');const people=d.members||[];const paid=people.filter(m=>m.paymentPaid).length;$('paymentSummary').textContent=`Đã đóng: ${paid}/${people.length} thành viên · Mức quỹ: 20.000đ/người`;list.innerHTML=people.map(m=>`<div class="payment-person"><span>${escapeHTML(m.name||'Thành viên')}</span><span class="payment-state ${m.paymentPaid?'paid':'unpaid'}">${m.paymentPaid?'✓ Đã đóng':'Chưa đóng'}</span></div>`).join('')||'<p class="muted">Chưa có thành viên.</p>';if(d.qr){$('paymentQrPreview').src=d.qr;$('paymentQrPreview').classList.remove('hidden')}else{$('paymentQrPreview').removeAttribute('src');$('paymentQrPreview').classList.add('hidden')}}catch(e){$('paymentSummary').textContent='Không tải được thông tin quỹ.'}}
+window.setMemberPaid=async(id,paid)=>{try{await adminFetch('/api/admin/members/'+encodeURIComponent(id)+'/payment',{method:'PATCH',body:JSON.stringify({paid})});$('memberAdminToast').textContent=paid?'Đã đánh dấu thành viên đóng quỹ 20K.':'Đã bỏ đánh dấu đóng quỹ.';await loadAdminRoster();await loadPaymentInfo();await loadPublicRoster()}catch(e){$('memberAdminToast').textContent=e.message;await loadAdminRoster()}};
+let pendingPaymentQr='';
+$('paymentQrFile').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;if(!['image/png','image/jpeg','image/webp'].includes(file.type)){alert('Vui lòng chọn ảnh PNG, JPG hoặc WebP.');e.target.value='';return}if(file.size>3*1024*1024){alert('Ảnh QR cần nhỏ hơn 3 MB.');e.target.value='';return}const reader=new FileReader();reader.onload=()=>{pendingPaymentQr=String(reader.result||'');$('paymentQrPreview').src=pendingPaymentQr;$('paymentQrPreview').classList.remove('hidden')};reader.readAsDataURL(file)});
+$('savePaymentQrBtn').addEventListener('click',async()=>{try{if(!pendingPaymentQr)throw new Error('Hãy chọn ảnh QR mới trước khi lưu.');const qr=pendingPaymentQr;await adminFetch('/api/admin/payment-qr',{method:'POST',body:JSON.stringify({qr})});pendingPaymentQr='';$('memberAdminToast').textContent='Đã lưu mã QR nhận quỹ.';await loadPaymentInfo()}catch(e){$('memberAdminToast').textContent=e.message}});
+$('removePaymentQrBtn').addEventListener('click',async()=>{if(!confirm('Xóa mã QR chuyển khoản hiện tại?'))return;try{await adminFetch('/api/admin/payment-qr',{method:'POST',body:JSON.stringify({qr:''})});pendingPaymentQr='';$('paymentQrFile').value='';$('memberAdminToast').textContent='Đã xóa mã QR.';await loadPaymentInfo()}catch(e){$('memberAdminToast').textContent=e.message}});
+function addGameRow(game={}){const row=document.createElement('div');row.className='game-row';row.innerHTML=`<input placeholder="Game Tag" aria-label="Game Tag" value="${escapeHTML(game.gameTag||'')}"><input placeholder="Tên trong Game" aria-label="Tên trong Game" value="${escapeHTML(game.gameName||'')}"><select aria-label="Town Hall"><option value="" ${game.townHall?'':'selected'}>Chọn TH</option>${Array.from({length:19},(_,i)=>String(i+1)).map(t=>`<option value="${t}" ${String(game.townHall||'')===t?'selected':''}>TH ${t}</option>`).join('')}</select><select aria-label="Cấp bậc">${rankOptions.map(r=>`<option ${r===(game.rank||'Hội viên')?'selected':''}>${r}</option>`).join('')}</select><button type="button" class="danger">Xóa ID</button>`;row.querySelector('button').addEventListener('click',()=>row.remove());$('gameIdsEditor').appendChild(row)}
+function openMemberEditor(m=null){editingMemberId=m?.id||null;$('memberForm').reset();$('gameIdsEditor').innerHTML='';$('memberEditorTitle').textContent=m?'Sửa thông tin thành viên':'Thêm thành viên';const f=$('memberForm');for(const k of ['name','phone','zaloName','status','bankName','bankAccount','bankRecipient'])if(m&&m[k]!=null)f.elements[k].value=m[k];(m?.gameIds?.length?m.gameIds:[{}]).forEach(addGameRow);$('memberEditor').classList.remove('hidden');$('memberEditor').scrollIntoView({behavior:'smooth',block:'start'})}
+
+window.editMember=async id=>{try{const d=await adminFetch('/api/admin/members');openMemberEditor(d.members.find(m=>m.id===id))}catch(e){$('memberAdminToast').textContent=e.message}};
+window.deleteMember=async id=>{if(!confirm('Bạn chắc chắn muốn xóa thành viên này?'))return;try{await adminFetch('/api/admin/members/'+encodeURIComponent(id),{method:'DELETE'});$('memberAdminToast').textContent='Đã xóa thành viên.';await loadAdminRoster();await loadPublicRoster()}catch(e){$('memberAdminToast').textContent=e.message}};
+$('newMemberBtn').addEventListener('click',()=>openMemberEditor());$('addGameIdBtn').addEventListener('click',()=>addGameRow());$('cancelMemberEdit').addEventListener('click',()=>$('memberEditor').classList.add('hidden'));$('cancelMemberEdit2').addEventListener('click',()=>$('memberEditor').classList.add('hidden'));
+$('memberForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;const gameIds=[...$('gameIdsEditor').querySelectorAll('.game-row')].map(r=>{const x=r.querySelectorAll('input,select');return {gameTag:x[0].value,gameName:x[1].value,townHall:x[2].value,rank:x[3].value}}).filter(g=>g.gameTag||g.gameName||g.townHall);const body={name:f.elements.name.value,phone:f.elements.phone.value,zaloName:f.elements.zaloName.value,status:f.elements.status.value,bankName:f.elements.bankName.value,bankAccount:f.elements.bankAccount.value,bankRecipient:f.elements.bankRecipient.value,gameIds};try{await adminFetch(editingMemberId?'/api/admin/members/'+encodeURIComponent(editingMemberId):'/api/admin/members',{method:editingMemberId?'PUT':'POST',body:JSON.stringify(body)});$('memberAdminToast').textContent='Đã lưu thông tin thành viên.';$('memberEditor').classList.add('hidden');await loadAdminRoster();await loadPublicRoster()}catch(err){$('memberAdminToast').textContent=err.message}});
+$('exportBtn').addEventListener('click',async()=>{try{const r=await adminFetch('/api/admin/export.csv');const blob=await r.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='thanh-vien-song-vi-ae.csv';a.click();URL.revokeObjectURL(url)}catch(e){$('memberAdminToast').textContent=e.message}});
+$('logoutMemberAdminBtn').addEventListener('click',()=>{memberAdminToken='';$('memberAdminPanel').classList.add('hidden');$('memberAdminLogin').classList.remove('hidden');$('memberAdminPassword').value='';$('memberEditor').classList.add('hidden');$('memberAdminToast').textContent='Đã đăng xuất.'});
+loadPublicRoster();
+loadPaymentInfo();
+
+drawWheel();
+</script>
+
+<script>
+(() => {
+    const canvas = document.getElementById('snowfall');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const reduceMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    let width = 0;
+    let height = 0;
+    let flakes = [];
+    let animationId;
+
+    function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
+
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const count = Math.min(
+            100,
+            Math.max(25, Math.floor(width / 12))
+        );
+
+        flakes = Array.from({ length: count }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: Math.random() * 2 + 0.7,
+            speed: Math.random() * 0.7 + 0.3,
+            drift: Math.random() * 0.5 - 0.25,
+            alpha: Math.random() * 0.45 + 0.25
+        }));
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (const f of flakes) {
+            ctx.beginPath();
+            ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${f.alpha})`;
+            ctx.fill();
+
+            f.y += f.speed;
+            f.x += f.drift + Math.sin(f.y / 50) * 0.2;
+
+            if (f.y > height + 5) {
+                f.y = -5;
+                f.x = Math.random() * width;
+            }
+
+            if (f.x > width + 5) f.x = -5;
+            if (f.x < -5) f.x = width + 5;
+        }
+
+        animationId = requestAnimationFrame(draw);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    if (!reduceMotion) {
+        draw();
+    } else {
+        for (const f of flakes) {
+            ctx.beginPath();
+            ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${f.alpha})`;
+            ctx.fill();
+        }
+    }
+})();
+</script>
+
+</body>
+</html>
