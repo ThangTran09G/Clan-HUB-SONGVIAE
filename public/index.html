@@ -76,7 +76,24 @@ footer{text-align:center;color:#7f89b1;padding:4px 16px 26px;font-size:12px}
 .event-overlay{position:fixed;inset:0;z-index:50;background:#050817d9;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
 .event-dialog{width:min(850px,100%);max-height:min(90vh,900px);overflow-y:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:clamp(16px,3vw,28px);box-shadow:0 24px 90px #0009;margin:auto}
 .event-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.event-head h2{font-size:clamp(21px,4vw,28px);margin:0}.event-close{font-size:22px;padding:6px 12px;flex-shrink:0}
-.event-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.event-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#8080800d}.event-card h3{margin:0 0 10px;color:var(--gold);font-size:18px}.event-card ul{padding-left:21px;margin:8px 0 0}.event-card li{margin:7px 0;line-height:1.5}.event-prize{display:inline-block;border-radius:999px;background:#ffd16620;color:var(--gold);font-weight:900;padding:7px 11px;margin-top:5px}.event-rounds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.event-round{border:1px solid var(--line);border-radius:12px;padding:10px}.event-round strong{display:block;color:var(--gold);margin-bottom:3px}.event-note{margin-top:14px;padding:12px;border:1px dashed var(--gold);border-radius:12px;line-height:1.5}
+.event-grid{ display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  gap: 16px;}
+    .event-card{width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  background: #8080800d;}
+    .event-card h3{margin:0 0 10px;color:var(--gold);font-size:18px}
+    
+    .event-card ul{padding-left:21px;margin:8px 0 0}
+    .event-card li{margin:7px 0;line-height:1.5}.event-prize{display:inline-block;border-radius:999px;background:#ffd16620;color:var(--gold);font-weight:900;padding:7px 11px;margin-top:5px}.event-rounds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.event-round{border:1px solid var(--line);border-radius:12px;padding:10px}.event-round strong{display:block;color:var(--gold);margin-bottom:3px}.event-note{margin-top:14px;padding:12px;border:1px dashed var(--gold);border-radius:12px;line-height:1.5}
 @media(max-width:620px){.event-grid{grid-template-columns:1fr}.event-dialog{max-height:94vh}.event-rounds{grid-template-columns:1fr 1fr}}
 
 /* Hiệu ứng button khi di chuột */
@@ -382,15 +399,17 @@ button:hover {
     <div class="event-head"><h2 id="eventRulesTitle">📜 Thể lệ Event Clan Sống Vì AE</h2><button type="button" class="secondary event-close" id="closeEventRulesBtn" aria-label="Đóng thể lệ">✕</button></div>
     <div class="event-grid">
      
-      <article class="event-card"><h3>🎡 Event War 7 ngày — Vòng quay may mắn</h3><p><strong>Quỹ giải thưởng dự kiến: 500K</strong>, chia thành 6 vòng quay theo cơ cấu bên dưới.</p><ul><li><strong>Điều kiện tham gia:</strong> Đóng 20K vào quỹ.</li><li><strong>Thể lệ:</strong> Người đã đóng 20K phải war đủ cả 7 ngày; các thành viên còn lại war thay phiên.</li></ul><div class="event-prize">💰 Tổng 6 vòng: 500K</div></article>
+      <article class="event-card"><h3>🎡 Event War 7 ngày — Vòng quay may mắn</h3><p><strong>Quỹ giải thưởng dự kiến: 500K</strong>, chia thành 8 vòng quay theo cơ cấu bên dưới.</p><ul><li><strong>Điều kiện tham gia:</strong> Đóng 20K vào quỹ.</li><li><strong>Thể lệ:</strong> Người đã đóng 20K phải war đủ cả 7 ngày; các thành viên còn lại war thay phiên.</li></ul><div class="event-prize">💰 Tổng 6 vòng: 500K</div></article>
     </div>
     <div class="panel-section"><h3 style="margin:0 0 8px;color:var(--gold)">🏆 Cơ cấu 6 vòng quay</h3><div class="event-rounds">
       <div class="event-round"><strong>Vòng 1 — 150K</strong><span>Cho anh em đóng quỹ và war đủ 7 ngày.</span></div>
-      <div class="event-round"><strong>Vòng 2 — 100K</strong><span>Dành cho anh em đạt đủ 21 sao.</span></div>
-      <div class="event-round"><strong>Vòng 3 — 100K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
+      <div class="event-round"><strong>Vòng 2 — 150K</strong><span>Dành cho anh em đạt đủ 21 sao.</span></div>
+      <div class="event-round"><strong>Vòng 3 — 50K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
       <div class="event-round"><strong>Vòng 4 — 50K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
       <div class="event-round"><strong>Vòng 5 — 50K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
-      <div class="event-round"><strong>Vòng 6 — 50K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
+      <div class="event-round"><strong>Vòng 6 — 20K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
+      <div class="event-round"><strong>Vòng 7 — 20K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
+      <div class="event-round"><strong>Vòng 8 — 10K</strong><span>Tất cả người tham gia đủ điều kiện.</span></div>
     </div><div class="event-note">📌 <strong>Nguyên tắc:</strong> Mỗi người chỉ được quay trúng thưởng <strong>1 lần</strong>, không nhận giải lần thứ hai. Vòng 1 và vòng 2 áp dụng điều kiện riêng như mô tả; các vòng còn lại dành cho tất cả người tham gia đủ điều kiện.</div></div>
   </section>
 </div>
