@@ -51,7 +51,7 @@
       ],
       "createdAt": "2026-10-11T05:59:32.194Z",
       "updatedAt": "2026-10-11T05:59:32.194Z",
-      "paymentPaid": false
+      "paymentPaid": true
     },
     {
       "id": "3cd85cbd-0253-46e0-ac9e-076795ec1a7c",
@@ -79,7 +79,7 @@
       ],
       "createdAt": "2026-10-11T05:59:32.194Z",
       "updatedAt": "2026-10-11T05:59:32.194Z",
-      "paymentPaid": false
+      "paymentPaid": true
     },
     {
       "id": "18aba038-ac63-49ab-b797-edadebb1ef3c",
@@ -201,7 +201,7 @@
       ],
       "createdAt": "2026-10-11T05:59:32.194Z",
       "updatedAt": "2026-10-11T05:59:32.194Z",
-      "paymentPaid": false
+      "paymentPaid": true
     },
     {
       "id": "c85cd317-e779-4b8d-af9d-f188cfae30de",
@@ -301,7 +301,7 @@
       ],
       "createdAt": "2026-10-11T05:59:32.194Z",
       "updatedAt": "2026-10-11T05:59:32.194Z",
-      "paymentPaid": false
+      "paymentPaid": true
     },
     {
       "id": "abee616a-bd2a-49cf-8cb8-bc11fb779634",
@@ -371,7 +371,7 @@
           "rank": "Hội viên"
         }
       ],
-      "paymentPaid": false,
+      "paymentPaid": true,
       "createdAt": "2026-10-11T14:47:25.982Z",
       "updatedAt": "2026-10-11T14:47:25.982Z"
     }
